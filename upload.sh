@@ -7,7 +7,7 @@
 
 function usage(){
 
-	echo -e "\nThe script can be used to upload file/directory to google drive." 
+	echo -e "\nThe script can be used to upload file/directory to google drive."
 	echo -e "\nUsage:\n $0 [options..] <filename> <foldername> \n"
 	echo -e "Foldername argument is optional. If not provided, the file will be uploaded to preconfigured google drive. \n"
 	echo -e "File name argument is optional if create directory option is used. \n"
@@ -16,7 +16,7 @@ function usage(){
 	echo -e "-r | --root-dir <google_folderid> - google folder id to which the file/directory to upload."
 	echo -e "-v | --verbose - Display detailed message."
 	echo -e "-z | --config - Override default config file with custom config file."
-	echo -e "-h | --help - Display usage instructions.\n" 
+	echo -e "-h | --help - Display usage instructions.\n"
 	exit 0;
 }
 
@@ -41,11 +41,11 @@ then
 fi
 
 PROGNAME=${0##*/}
-SHORTOPTS="vhr:C:z:" 
-LONGOPTS="verbose,help,create-dir:,root-dir:,config:" 
+SHORTOPTS="vhr:C:z:"
+LONGOPTS="verbose,help,create-dir:,root-dir:,config:"
 
-set -o errexit -o noclobber -o pipefail #-o nounset 
-OPTS=$(getopt -s bash --options $SHORTOPTS --longoptions $LONGOPTS --name $PROGNAME -- "$@" ) 
+set -o errexit -o noclobber -o pipefail #-o nounset
+OPTS=$(getopt -s bash --options $SHORTOPTS --longoptions $LONGOPTS --name $PROGNAME -- "$@" )
 
 # script to parse the input arguments
 #if [ $? != 0 ] ; then echo "Failed parsing options." >&2 ; exit 1 ; fi
@@ -101,14 +101,14 @@ fi
 function jsonValue() {
 KEY=$1
 num=$2
-awk -F"[,:}][^://]" '{for(i=1;i<=NF;i++){if($i~/\042'$KEY'\042/){print $(i+1)}}}' | tr -d '"' | sed -n ${num}p | sed -e 's/[}]*$//' -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' -e 's/[,]*$//' 
+awk -F"[,:}][^://]" '{for(i=1;i<=NF;i++){if($i~/\042'$KEY'\042/){print $(i+1)}}}' | tr -d '"' | sed -n ${num}p | sed -e 's/[}]*$//' -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' -e 's/[,]*$//'
 }
 
 function log() {
-	
+
 	if [ "$VERBOSE" = true ]; then
 		echo -e "${1}"
-	
+
 	fi
 }
 
@@ -211,13 +211,7 @@ then
     		ROOT_FOLDER="root"
     		echo "ROOT_FOLDER=$ROOT_FOLDER" >> $HOME/.googledrive.conf
     	else
-		    if expr "$ROOT_FOLDER" : '^[A-Za-z0-9_-]\{28\}$' > /dev/null
-		    then
-				echo "ROOT_FOLDER=$ROOT_FOLDER" >> $HOME/.googledrive.conf
-			else
-				echo "Invalid root folder id"
-				exit -1
-			fi
+		    echo "ROOT_FOLDER=$ROOT_FOLDER" >> $HOME/.googledrive.conf
 		fi
 fi
 
@@ -268,7 +262,7 @@ if [ -z "$FOLDERNAME" ] || [[ `echo "$FOLDERNAME" | tr [:upper:] [:lower:]` = `e
     FOLDER_ID=$ROOT_FOLDER
 else
 	FOLDER_ID=`createDirectory "$FOLDERNAME" "$ROOT_FOLDER" "$ACCESS_TOKEN"`
-						 
+
 fi
 	log "Folder ID for folder name $FOLDERNAME : $FOLDER_ID"
 
